@@ -3,6 +3,7 @@ package LP;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
 
@@ -14,12 +15,17 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.border.EmptyBorder;
+import javax.swing.table.AbstractTableModel;
 
 import COMUN.clsConstantes;
 import LN.clsCamiseta;
 import LN.clsGestorAdministrador;
 
+import java.awt.Dimension;
 import java.awt.Font;
 /**
  * 
@@ -39,13 +45,13 @@ public class frmModifCami extends JFrame implements ActionListener
 	private JLabel lblCamisetas;
 	private clsGestorAdministrador gestor;
 	private JButton btnModificar;
-	private JTextField txtNombre;
 	private JTextField txtPrecio;
-	private JTextField txtColor;
-	private JTextField txtTalla;
-	private JTextField txtCodigo;
 	private HashSet<clsCamiseta> camisetas;
 	private JTextField txtCantidad;
+
+	private JTable table;
+
+	private JScrollPane scrollPane;
 	
 	/**
 	 * Constructor, donde ponemos la ventana en modo visible y llamamos al metodo correspondiente para la creación de la ventana.
@@ -53,92 +59,67 @@ public class frmModifCami extends JFrame implements ActionListener
 	 */
 	public frmModifCami() 
 	{
-		getContentPane().setLayout(null);
-				
-		JLabel lblNombre = new JLabel("Nombre");
-		lblNombre.setFont(new Font("Times New Roman", Font.PLAIN, 16));
-		lblNombre.setBounds(24, 105, 56, 14);
-		getContentPane().add(lblNombre);
+		this.setVisible(true);
 		
-		txtNombre = new JTextField();
-		txtNombre.setBounds(131, 102, 115, 20);
-		getContentPane().add(txtNombre);
-		txtNombre.setColumns(10);
+		CargarDatos();
+		createAndShowGUI();
+	}
+	
+	/**
+	 * Con este metodo creamos nuestra ventana
+	 */
+	public void createAndShowGUI() 
+	{
+		getContentPane().setLayout(null);
+		
+		crearTabla();
+		
+		JPanel contentPane = new JPanel();
+		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+		setContentPane(contentPane);
+		contentPane.setLayout(null);
+		
+		scrollPane = new JScrollPane();
+		scrollPane.setBounds(20, 25, 516, 230);
+		contentPane.add(scrollPane);
+		
+		scrollPane.setViewportView(table);
 		
 		JLabel lblPrecio = new JLabel("Precio");
 		lblPrecio.setFont(new Font("Times New Roman", Font.PLAIN, 16));
-		lblPrecio.setBounds(24, 146, 46, 14);
+		lblPrecio.setBounds(29, 312, 46, 14);
 		getContentPane().add(lblPrecio);
 		
 		txtPrecio = new JTextField();
 		txtPrecio.setColumns(10);
-		txtPrecio.setBounds(131, 144, 115, 20);
+		txtPrecio.setBounds(90, 306, 60, 20);
 		getContentPane().add(txtPrecio);
-		
-		JLabel lblColor = new JLabel("Color");
-		lblColor.setFont(new Font("Times New Roman", Font.PLAIN, 16));
-		lblColor.setBounds(24, 188, 46, 14);
-		getContentPane().add(lblColor);
-		
-		txtColor = new JTextField();
-		txtColor.setColumns(10);
-		txtColor.setBounds(131, 185, 115, 20);
-		getContentPane().add(txtColor);
-		
-		JLabel lblTalla = new JLabel("Talla");
-		lblTalla.setFont(new Font("Times New Roman", Font.PLAIN, 16));
-		lblTalla.setBounds(24, 225, 46, 14);
-		getContentPane().add(lblTalla);
-		
-		txtTalla = new JTextField();
-		txtTalla.setColumns(10);
-		txtTalla.setBounds(131, 222, 115, 20);
-		getContentPane().add(txtTalla);
-	
-		JLabel lblCodigo = new JLabel("Cod.Barras");
-		lblCodigo.setFont(new Font("Times New Roman", Font.PLAIN, 16));
-		lblCodigo.setBounds(24, 269, 85, 14);
-		getContentPane().add(lblCodigo);
-		
-		txtCodigo = new JTextField();
-		txtCodigo.setColumns(10);
-		txtCodigo.setBounds(131, 268, 115, 20);
-		getContentPane().add(txtCodigo);
-	
-		JCheckBox chckboxEscote = new JCheckBox("SI");
-		chckboxEscote.setBounds(397, 103, 41, 23);
-		getContentPane().add(chckboxEscote);
-		
-		JLabel lblEscote = new JLabel("Escote");
-		lblEscote.setFont(new Font("Times New Roman", Font.PLAIN, 16));
-		lblEscote.setBounds(302, 105, 85, 14);
-		getContentPane().add(lblEscote);
 		
 		JButton btnModificar = new JButton("Modificar");
 		btnModificar.setFont(new Font("Times New Roman", Font.PLAIN, 14));
-		btnModificar.setBounds(427, 197, 107, 42);
+		btnModificar.setBounds(346, 309, 107, 23);
 		getContentPane().add(btnModificar);
 		btnModificar.addActionListener(this);
 		btnModificar.setActionCommand("Modificar");
 		
 		jcbCamisetas= new JComboBox<String>();
-		jcbCamisetas.setBounds(46, 36, 200, 20);
+		jcbCamisetas.setBounds(29, 268, 121, 20);
 		getContentPane().add(jcbCamisetas);
 		
 		JLabel lblCantidad = new JLabel("Cantidad");
 		lblCantidad.setFont(new Font("Times New Roman", Font.PLAIN, 16));
-		lblCantidad.setBounds(302, 148, 85, 14);
+		lblCantidad.setBounds(182, 312, 60, 14);
 		getContentPane().add(lblCantidad);
 		
 		JButton btnAtras = new JButton("Atras");
 		btnAtras.setFont(new Font("Times New Roman", Font.PLAIN, 14));
-		btnAtras.setBounds(445, 266, 89, 23);
+		btnAtras.setBounds(463, 309, 89, 23);
 		getContentPane().add(btnAtras);
 		btnAtras.addActionListener(this);
 		btnAtras.setActionCommand("Atras");
 		
 		txtCantidad = new JTextField();
-		txtCantidad.setBounds(397, 145, 41, 20);
+		txtCantidad.setBounds(267, 306, 41, 20);
 		getContentPane().add(txtCantidad);
 		txtCantidad.setColumns(10);
 		
@@ -178,7 +159,7 @@ public class frmModifCami extends JFrame implements ActionListener
 	{
 		case "Modificar":
 		
-			if(txtNombre.getText().length()>0 && txtPrecio.getText().length()>0 && txtColor.getText().length()>0 && txtTalla.getText().length()>0 && txtCodigo.getText().length()>0 && txtCantidad.getText().length()>0)
+			if( txtPrecio.getText().length()>0 && txtCantidad.getText().length()>0)
 			{
 										
 				camisetas=gestor.verCamisetas();
@@ -197,42 +178,10 @@ public class frmModifCami extends JFrame implements ActionListener
 						if (aux.getIntegerProperty(clsConstantes.CODIGODEBARRASCAMI) == codigo) 
 						{
 							
-							String nombre1 = txtNombre.getText();
-							aux.setNombre(nombre1);
-
-							
 							Double precio1 =Double.parseDouble(txtPrecio.getText());
 							aux.setPrecio(precio1);
 
-							
-							String color1 = txtColor.getText();
-							aux.setColor(color1);
-
-							
-							int talla1 = Integer.parseInt(txtTalla.getText());
-							if(talla1>31||talla1<45)
-							{
-								aux.setTalla(talla1);
-							}
-							else
-							{
-								JOptionPane.showMessageDialog(this, "La talla de la camiseta debe ser como mínimo 32 y como máximo 44");
-							}
-							
-							int codigo1 = Integer.parseInt(txtCodigo.getText());
-							aux.setCodbarrasCami(codigo1);
-							
-						
-							if(chckboxEscote.isSelected())
-							{
-								aux.setEscote(true);
-							}
-							else
-							{
-								
-								aux.setEscote(false);
-							}
-							
+														
 							int cantidad1=Integer.parseInt(txtCantidad.getText());
 							aux.setCantidad(cantidad1);
 							
@@ -263,4 +212,121 @@ public class frmModifCami extends JFrame implements ActionListener
 		frmMenuModif mm=new frmMenuModif();
 		mm.setVisible(true);
 	}
+	private void crearTabla()
+	{	
+		table=null;
+		
+		TablaCamisModifModel tab= new TablaCamisModifModel(camisetas);
+		
+		table=new JTable(tab);
+		table.setPreferredScrollableViewportSize(new Dimension(500,70));
+		table.setFillsViewportHeight(true);
+		table.setRowSelectionAllowed(true);
+		tab.fireTableDataChanged();
+		
+	}
+	/**
+	 * Con este metodo, cargamos los datos procedentes del metodo verCamisetas de gestor, en una lista.
+	 * @throws IOException 
+	 */
+	private  void CargarDatos() 
+	{	
+		clsGestorAdministrador objGestor = new clsGestorAdministrador();
+		
+		camisetas=objGestor.verCamisetas();
+		
+		if(camisetas.size()==0)
+		{
+			JOptionPane.showMessageDialog(this, "No hay camisetas registradas");
+			dispose();
+		}
+		
+	}
+}
+	/**
+	 * 
+	 * @author Paula y Andrea
+	 * Clase que creamos con el fin de crear la tabla.
+	 */
+	class TablaCamisModifModel extends AbstractTableModel
+    {
+		private static final long serialVersionUID = 1L;
+		
+		private String[] columnNames = {"Cod Barras","Nombre","Talla","Color","Precio", "Escote", "Cantidad"};
+        Object[][] data;
+        /**
+         * Constructor del modelo de datos para la JTable de camisetas.
+         * @param m Lista de camiseta
+         */
+		
+        public TablaCamisModifModel(HashSet<clsCamiseta> m)
+        {      	
+        	super();     	
+    		setData(m);	
+        }
+        /**
+         * Método con la misma implementación del constructor para poder hacer un modelo de datos de la JTable de Camisetas.
+         * @param camisetas Lista de camisetas
+         */
+        public void setData(HashSet<clsCamiseta> camisetas) 
+        {
+        	int filas = camisetas.size();
+    		int cont;
+    		
+    		data=new Object[filas][];
+    		cont=0;	
+    		
+    		for (clsCamiseta aux : camisetas)
+    		{
+    			Object[]a = 
+    				{
+    				   new Integer(aux.getIntegerProperty(clsConstantes.CODIGODEBARRASCAMI)),
+   					   new String(aux.getStringProperty(clsConstantes.NOMBRECAMI)),
+   					   new Integer (aux.getIntegerProperty(clsConstantes.TALLACAMI)),
+   					   new String(aux.getStringProperty(clsConstantes.COLORCAMI)),
+   					   new Double (aux.getDoubleProperty(clsConstantes.PRECIOCAMI)),
+   					   new Boolean(aux.getBooleanProperty(clsConstantes.ESCOTE)),
+   					   new Integer(aux.getIntegerProperty(clsConstantes.CANTIDADCAMI))
+    				   
+    				};
+    			
+    			data[cont]=a;
+    			cont++;
+    		}
+        }
+		
+		
+        @Override
+    	public int getColumnCount() {
+    		// TODO Auto-generated method stub
+    		return columnNames.length;
+    	}
+
+    	@Override
+    	public int getRowCount() {
+    		// TODO Auto-generated method stub
+    		return data.length;
+    	}
+
+    	public String getColumnName(int col) {
+            return columnNames[col];
+        }
+
+        public Object getValueAt(int row, int col) {
+            return data[row][col];
+        }
+        @SuppressWarnings({ "unchecked", "rawtypes" })
+    	public Class getColumnClass(int c) {
+            return getValueAt(0, c).getClass();
+        }
+        public boolean isCellEditable(int row, int col) 
+        {          
+                return false;           
+        }
+        public void setValueAt(Object value, int row, int col) 
+        {
+            
+            data[row][col] = value;
+            fireTableCellUpdated(row, col);
+        }
 }

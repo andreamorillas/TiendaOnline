@@ -124,6 +124,8 @@ public class frmClienteCompraCamiseta extends JFrame implements ActionListener
 			
 			try {
 				this.Comprar();
+				frmHilo hilo=new frmHilo();
+				hilo.setVisible(true);
 			} catch (ExcepcionClientesNoGuardados | ExcepcionNoCompras | IOException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();

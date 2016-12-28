@@ -190,7 +190,7 @@ class TablaComprasModel extends AbstractTableModel
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	private String[] columnNames= {"Id Compra", "Cod.Barras", "Nickname"};
+	private String[] columnNames= {"Id Compra", "Cod.Barras"};
 	Object [][] data;
 	 /**
      * Constructor del modelo de datos para la JTable de clientes.
@@ -222,8 +222,6 @@ class TablaComprasModel extends AbstractTableModel
 						new Integer(aux.getIntegerProperty(clsConstantes.IDCOMPRA)),
 						new Integer(aux.getIntegerProperty(clsConstantes.CODIGOCOMPRA)),
 
-					
-					
 					};
 			
 			data[cont]=a;
@@ -247,10 +245,15 @@ class TablaComprasModel extends AbstractTableModel
 	public String getColumnName(int col) {
         return columnNames[col];
     }
+	@Override
+	public Object getValueAt(int row, int col) {
+		// TODO Auto-generated method stub
+		return data[row][col];
+	}
 
-    public Object getValueAt(int row, int col) {
-        return data[row][col];
-    }
+//    public Object getValueAt(int row, int col) {
+//        return data[row][col];
+//    }
 //    @SuppressWarnings({ "unchecked", "rawtypes" })
 //	public Class getColumnClass(int c) {
 //        return getValueAt(0, c).getClass();

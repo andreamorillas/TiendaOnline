@@ -183,15 +183,17 @@ public class clsGestorCliente
 				{
 					
 					cantidad=aux.getIntegerProperty(clsConstantes.CANTIDADCAMI);
-					System.out.println(cantidad);
+					System.out.println("Lo que habia:"+ cantidad);
 					cantidad=cantidad-unidad;
-					System.out.println(cantidad);
+					
+					System.out.println("Las que quedan:" +cantidad);
 					aux.setCantidad(cantidad);
-										
+					
+					gestor.modificarCamiseta(listaCamisetas);
+					
 					idCompra=listaCompras.size();
 					idCompra++;
 					System.out.println(idCompra);
-					
 					
 					this.GuardarCompra(NICKNAME,codigo,idCompra);
 				}
@@ -203,7 +205,7 @@ public class clsGestorCliente
 				listaCamisetas.add((clsCamiseta)aux);
 			}		
 			
-			gestor.verCamisetas();	
+	
 				
 	}
 		
@@ -236,6 +238,7 @@ public class clsGestorCliente
 		
 		
 	}
+	
 	public void ComprobarContraseña(String nickname, String contraseña) throws ExcepcionClienteNoExistente, ExcepcionContraseñaIncorrecta, IOException, ExcepcionClientesNoGuardados 
 	{
 		
@@ -266,6 +269,7 @@ public class clsGestorCliente
 		
 		
 	}
+	
 	public clsCliente DevolverCliente(String NICKNAME) throws ExcepcionClientesNoGuardados, IOException
 	{
 		clsCliente cliente = new clsCliente();

@@ -110,6 +110,11 @@ public class frmClienteCompraPantalon extends JFrame implements ActionListener
 			this.dispose();
 			break;
 		
+		case "Comprar":
+			frmHilo hilo=new frmHilo();
+			hilo.setVisible(true);
+			break;
+		
 		}
 	}
 	/**
