@@ -6,6 +6,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 
 import LN.ExcepcionClientesNoGuardados;
+import LN.ExcepcionNoCompras;
 import LN.clsCliente;
 import LN.clsGestorCliente;
 
@@ -122,7 +123,7 @@ public class frmCliente extends JFrame implements ActionListener
 			
 			try {
 				this.Carrito();
-			} catch (IOException e1) {
+			} catch (IOException | ExcepcionNoCompras e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
@@ -173,8 +174,9 @@ public class frmCliente extends JFrame implements ActionListener
 	 * El programa accede a este metodo cuanod el usuario selecciona el bonton Carrito.
 	 * Este metodo llama a la ventana donde podra visualizar sus compras
 	 * @throws IOException 
+	 * @throws ExcepcionNoCompras 
 	 */
-	private void Carrito() throws IOException 
+	private void Carrito() throws IOException, ExcepcionNoCompras 
 	{
 		
 		frmVerCarrito menu=new frmVerCarrito();

@@ -48,6 +48,7 @@ public class clsConstantes
 	
 	public static final String NICKCOMPRA = "raSlpMh";
 	public static final String CODIGOCOMPRA ="12M";
+	public static final String IDCOMPRA = "re";
 	
 	
 	

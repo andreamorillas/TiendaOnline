@@ -207,9 +207,6 @@ public class clsGestorCliente
 				
 	}
 		
-
-	
-	
 	public void GuardarCompra(String NICKNAME, int codigo,int idCompra) 
 	{
 		// TODO Auto-generated method stub
@@ -218,6 +215,7 @@ public class clsGestorCliente
 		datos.Save(compra);
 		datos.TerminarSave();
 	}
+	
 	public HashSet<clsCompra> verCompras() throws ExcepcionNoCompras  
 	{
 		ArrayList<Serializable> lista = new ArrayList<Serializable>();
@@ -228,8 +226,11 @@ public class clsGestorCliente
 		
 		for (Serializable s : lista) 
 		{
-			listaCompras.add((clsCompra) s);
+			listaCompras.add((clsCompra)s);
 		}
+		
+		datos.TerminarRead();
+		
 		System.out.println(listaCompras);
 		return listaCompras;
 		

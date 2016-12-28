@@ -8,6 +8,11 @@ import COMUN.clsExcepcionParametroIncorrecto;
 public class clsCompra implements itfProperty, Serializable
 {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	
 	private String nickname;
 	private int codigo;
 	private int id;
@@ -49,6 +54,7 @@ public class clsCompra implements itfProperty, Serializable
 		switch(propiedad)
 		{
 			case clsConstantes.CODIGOCOMPRA: return this.getCodigo();
+			case clsConstantes.IDCOMPRA: return this.getId();
 			
 			default: throw new clsExcepcionParametroIncorrecto(propiedad);
 		}
