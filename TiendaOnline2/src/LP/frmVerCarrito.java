@@ -22,7 +22,8 @@ import LN.ExcepcionClientesNoGuardados;
 import LN.ExcepcionNoCompras;
 import LN.clsCamiseta;
 import LN.clsCliente;
-import LN.clsCompra;
+import LN.clsCompraCamiseta;
+
 import LN.clsGestorAdministrador;
 import LN.clsGestorCliente;
 
@@ -40,7 +41,7 @@ public class frmVerCarrito extends JFrame implements ActionListener
 
 	
 	private JTable table;
-	private HashSet<clsCompra> compras;
+	private HashSet<clsCompraCamiseta> compras;
 	private String NICKNAME;
 	private JScrollPane scrollPane;
 	/**
@@ -196,7 +197,7 @@ class TablaComprasModel extends AbstractTableModel
      * Constructor del modelo de datos para la JTable de clientes.
      * @param m Lista de clientes
      */
-	public TablaComprasModel(HashSet<clsCompra>lista)
+	public TablaComprasModel(HashSet<clsCompraCamiseta>lista)
 	{
 		super();
 		setData(lista);
@@ -205,7 +206,7 @@ class TablaComprasModel extends AbstractTableModel
      * Método con la misma implementación del constructor para poder hacer un modelo de datos de la JTable de clientes.
      * @param m Lista de clientes
      */
-	public void setData(HashSet<clsCompra> compras)
+	public void setData(HashSet<clsCompraCamiseta> compras)
 	{
 		int filas= compras.size();
 		int cont;
@@ -213,7 +214,7 @@ class TablaComprasModel extends AbstractTableModel
 		data=new Object[filas][];
 		cont=0;
 		
-		for (clsCompra aux : compras) 
+		for (clsCompraCamiseta aux : compras) 
 		{
 			
 			Object [] a= 

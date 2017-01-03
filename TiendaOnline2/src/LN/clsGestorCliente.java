@@ -167,7 +167,7 @@ public class clsGestorCliente
 		HashSet<clsCamiseta>listaCamisetas=new HashSet<clsCamiseta>();
 		clsGestorAdministrador gestor=new clsGestorAdministrador();
 		HashSet<clsCliente>listaClientes=new HashSet<clsCliente>();
-		HashSet<clsCompra>listaCompras=new HashSet<clsCompra>();
+		HashSet<clsCompraCamiseta>listaCompras=new HashSet<clsCompraCamiseta>();
 		
 		int cantidad=0;
 		int idCompra=0;
@@ -212,23 +212,23 @@ public class clsGestorCliente
 	public void GuardarCompra(String NICKNAME, int codigo,int idCompra) 
 	{
 		// TODO Auto-generated method stub
-		clsCompra compra=new clsCompra(NICKNAME, codigo, idCompra);
+		clsCompraCamiseta compra=new clsCompraCamiseta(NICKNAME, codigo, idCompra);
 		datos.ComenzarSave(enFicDatos.COMPRA);
 		datos.Save(compra);
 		datos.TerminarSave();
 	}
 	
-	public HashSet<clsCompra> verCompras() throws ExcepcionNoCompras  
+	public HashSet<clsCompraCamiseta> verCompras() throws ExcepcionNoCompras  
 	{
 		ArrayList<Serializable> lista = new ArrayList<Serializable>();
-		HashSet<clsCompra> listaCompras = new HashSet<clsCompra>();
+		HashSet<clsCompraCamiseta> listaCompras = new HashSet<clsCompraCamiseta>();
 		
 		datos.ComenzarRead(enFicDatos.COMPRA);
 		lista = datos.Read();
 		
 		for (Serializable s : lista) 
 		{
-			listaCompras.add((clsCompra)s);
+			listaCompras.add((clsCompraCamiseta)s);
 		}
 		
 		datos.TerminarRead();
@@ -236,6 +236,89 @@ public class clsGestorCliente
 		System.out.println(listaCompras);
 		return listaCompras;
 		
+		
+	}
+	
+	/**
+	 * Metodo de comprar camiseta
+	 * @param NICKNAME 
+	 * @param id
+	 * @throws IOException 
+	 * @throws ExcepcionNoCompras 
+	 */
+	public void compraPantalon(String NICKNAME, int codigo) throws ExcepcionNoCompras 
+	{
+		HashSet<clsCamiseta>listaCamisetas=new HashSet<clsCamiseta>();
+		clsGestorAdministrador gestor=new clsGestorAdministrador();
+		HashSet<clsCliente>listaClientes=new HashSet<clsCliente>();
+		HashSet<clsCompraPantalon>listaCompras=new HashSet<clsCompraPantalon>();
+		
+		int cantidad=0;
+		int idCompra=0;
+		int unidad=1;
+		
+		listaCamisetas=gestor.verCamisetas();
+		listaCompras=this.verComprasPant();
+		
+		
+			for (clsCamiseta aux : listaCamisetas) 
+			{
+				if(aux.getIntegerProperty(clsConstantes.CODIGODEBARRASCAMI).equals(codigo))
+				{
+					
+					cantidad=aux.getIntegerProperty(clsConstantes.CANTIDADCAMI);
+					System.out.println("Lo que habia:"+ cantidad);
+					cantidad=cantidad-unidad;
+					
+					System.out.println("Las que quedan:" +cantidad);
+					aux.setCantidad(cantidad);
+					
+					gestor.modificarCamiseta(listaCamisetas);
+					
+					idCompra=listaCompras.size();
+					idCompra++;
+					System.out.println(idCompra);
+					
+					this.GuardarCompra(NICKNAME,codigo,idCompra);
+				}
+			}
+			
+			datos.ResetFile(enFicDatos.CAMISETAS);
+			for (clsCamiseta aux : listaCamisetas) 
+			{
+				listaCamisetas.add((clsCamiseta)aux);
+			}		
+			
+	
+				
+	}
+		
+	public void GuardarCompraPant(String NICKNAME, int codigo,int idCompra) 
+	{
+		// TODO Auto-generated method stub
+		clsCompraCamiseta compra=new clsCompraCamiseta(NICKNAME, codigo, idCompra);
+		datos.ComenzarSave(enFicDatos.COMPRA);
+		datos.Save(compra);
+		datos.TerminarSave();
+	}
+	
+	public HashSet<clsCompraPantalon> verComprasPant() throws ExcepcionNoCompras  
+	{
+		ArrayList<Serializable> lista = new ArrayList<Serializable>();
+		HashSet<clsCompraPantalon> listaCompras = new HashSet<clsCompraPantalon>();
+		
+		datos.ComenzarRead(enFicDatos.COMPRA);
+		lista = datos.Read();
+		
+		for (Serializable s : lista) 
+		{
+			listaCompras.add((clsCompraPantalon)s);
+		}
+		
+		datos.TerminarRead();
+		
+		System.out.println(listaCompras);
+		return listaCompras;
 		
 	}
 	

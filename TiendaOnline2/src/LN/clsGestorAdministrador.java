@@ -105,13 +105,13 @@ public class clsGestorAdministrador {
 /**
  * Mediante este método borraremos todos los datos existentes del fichero PANTALONES y volveremos a introducirlos 
  * todos con la modificación del pantalón elegido por el usuario. 
- * @param listaPantalones lista de todos los pantalones registrados hasta el momento con la modificación hecha. 
+ * @param pantalones lista de todos los pantalones registrados hasta el momento con la modificación hecha. 
  */
-	public void modificarPantalon(ArrayList<clsPantalon> listaPantalones) 
+	public void modificarPantalon(HashSet<clsPantalon> pantalones) 
 	{
 
 		datos.ResetFile(enFicDatos.PANTALONES);
-		for (clsPantalon aux : listaPantalones) 
+		for (clsPantalon aux : pantalones) 
 		{
 			datos.ComenzarSave(enFicDatos.PANTALONES);
 			datos.Save(aux);
@@ -136,6 +136,7 @@ public class clsGestorAdministrador {
 			for (Serializable s : lista) 
 			{
 				listaCamisetas.add((clsCamiseta)s);
+				System.out.println(listaCamisetas);
 			}
 	
 		}

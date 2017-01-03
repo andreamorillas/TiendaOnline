@@ -1,10 +1,13 @@
 package LP;
 
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashSet;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -12,8 +15,13 @@ import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.border.EmptyBorder;
+import javax.swing.table.AbstractTableModel;
 
 import COMUN.clsConstantes;
 import LN.clsCamiseta;
@@ -27,20 +35,18 @@ import LN.clsPantalon;
 public class frmModifPant extends JFrame implements ActionListener
 {
 
-	private JPanel contentPane;
-	private JTextField txtEscote;
-	private JCheckBox chckboxEscote;
-
 	private JLabel lblPantalones;
 	private JComboBox<String> jcbPantalones;
 	private clsGestorAdministrador gestor;
 	private JButton btnModificar;
-	private JTextField txtNombre;
+	
 	private JTextField txtPrecio;
-	private JTextField txtColor;
-	private JTextField txtTalla;
-	private JTextField txtCodigo;
-	private ArrayList<clsPantalon> pantalones;
+	private JTextField txtCantidad;
+	private HashSet<clsPantalon> pantalones;
+	private JScrollPane scrollPane;
+	
+	private JTable table;
+	
 	
 	/**
 	 * Constructor, donde ponemos la ventana en modo visible y llamamos al metodo correspondiente para la creación de la ventana.
@@ -50,85 +56,58 @@ public class frmModifPant extends JFrame implements ActionListener
 	{
 		getContentPane().setLayout(null);
 				
+		crearTabla();
 		
 		setIconImage(Toolkit.getDefaultToolkit().getImage(clsPrincipal.class.getResource("/Image/Icono tienda.jpg")));
 		
-		JLabel lblNombre = new JLabel("Nombre");
-		lblNombre.setFont(new Font("Times New Roman", Font.PLAIN, 16));
-		lblNombre.setBounds(24, 105, 56, 14);
-		getContentPane().add(lblNombre);
+		JPanel contentPane = new JPanel();
+		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+		setContentPane(contentPane);
+		contentPane.setLayout(null);
 		
-		txtNombre = new JTextField();
-		txtNombre.setBounds(131, 102, 115, 20);
-		getContentPane().add(txtNombre);
-		txtNombre.setColumns(10);
+		scrollPane = new JScrollPane();
+		scrollPane.setBounds(20, 25, 516, 230);
+		contentPane.add(scrollPane);
+		
+		scrollPane.setViewportView(table);
 		
 		JLabel lblPrecio = new JLabel("Precio");
 		lblPrecio.setFont(new Font("Times New Roman", Font.PLAIN, 16));
-		lblPrecio.setBounds(24, 146, 46, 14);
+		lblPrecio.setBounds(29, 312, 46, 14);
 		getContentPane().add(lblPrecio);
 		
 		txtPrecio = new JTextField();
 		txtPrecio.setColumns(10);
-		txtPrecio.setBounds(131, 144, 115, 20);
+		txtPrecio.setBounds(90, 306, 60, 20);
 		getContentPane().add(txtPrecio);
-		
-		JLabel lblColor = new JLabel("Color");
-		lblColor.setFont(new Font("Times New Roman", Font.PLAIN, 16));
-		lblColor.setBounds(24, 188, 46, 14);
-		getContentPane().add(lblColor);
-		
-		txtColor = new JTextField();
-		txtColor.setColumns(10);
-		txtColor.setBounds(131, 185, 115, 20);
-		getContentPane().add(txtColor);
-		
-		JLabel lblTalla = new JLabel("Talla");
-		lblTalla.setFont(new Font("Times New Roman", Font.PLAIN, 16));
-		lblTalla.setBounds(24, 225, 46, 14);
-		getContentPane().add(lblTalla);
-		
-		txtTalla = new JTextField();
-		txtTalla.setColumns(10);
-		txtTalla.setBounds(131, 222, 115, 20);
-		getContentPane().add(txtTalla);
-	
-		JLabel lblCodigo = new JLabel("Cod.Barras");
-		lblCodigo.setFont(new Font("Times New Roman", Font.PLAIN, 16));
-		lblCodigo.setBounds(278, 107, 85, 14);
-		getContentPane().add(lblCodigo);
-		
-		txtCodigo = new JTextField();
-		txtCodigo.setColumns(10);
-		txtCodigo.setBounds(373, 104, 153, 20);
-		getContentPane().add(txtCodigo);
-	
-		JCheckBox chckBolsillos = new JCheckBox("SI");
-		chckBolsillos.setBounds(373, 144, 41, 23);
-		getContentPane().add(chckBolsillos);
-		
-		JLabel lblEscote = new JLabel("Bolsillos");
-		lblEscote.setFont(new Font("Times New Roman", Font.PLAIN, 16));
-		lblEscote.setBounds(278, 148, 85, 14);
-		getContentPane().add(lblEscote);
 		
 		JButton btnModificar = new JButton("Modificar");
 		btnModificar.setFont(new Font("Times New Roman", Font.PLAIN, 14));
-		btnModificar.setBounds(427, 197, 107, 42);
+		btnModificar.setBounds(346, 309, 107, 23);
 		getContentPane().add(btnModificar);
 		btnModificar.addActionListener(this);
 		btnModificar.setActionCommand("Modificar");
 		
 		jcbPantalones= new JComboBox<String>();
-		jcbPantalones.setBounds(46, 36, 200, 20);
+		jcbPantalones.setBounds(29, 268, 121, 20);
 		getContentPane().add(jcbPantalones);
+		
+		JLabel lblCantidad = new JLabel("Cantidad");
+		lblCantidad.setFont(new Font("Times New Roman", Font.PLAIN, 16));
+		lblCantidad.setBounds(182, 312, 60, 14);
+		getContentPane().add(lblCantidad);
 		
 		JButton btnAtras = new JButton("Atras");
 		btnAtras.setFont(new Font("Times New Roman", Font.PLAIN, 14));
-		btnAtras.setBounds(445, 266, 89, 23);
+		btnAtras.setBounds(463, 309, 89, 23);
 		getContentPane().add(btnAtras);
 		btnAtras.addActionListener(this);
 		btnAtras.setActionCommand("Atras");
+		
+		txtCantidad = new JTextField();
+		txtCantidad.setBounds(267, 306, 41, 20);
+		getContentPane().add(txtCantidad);
+		txtCantidad.setColumns(10);
 		
 		JLabel lblFondo = new JLabel("");
 		lblFondo.setIcon(new ImageIcon(frmAltaCamiseta.class.getResource("/Image/administracion.jpg")));
@@ -136,16 +115,22 @@ public class frmModifPant extends JFrame implements ActionListener
 		getContentPane().add(lblFondo);
 		
 		
-		lblPantalones = new JLabel("Pantalones");
+		lblPantalones = new JLabel("PAntalones");
 		gestor=new clsGestorAdministrador();
-		ArrayList<clsPantalon> listaPantalones = gestor.verPantalones();
+		HashSet<clsPantalon> listaPantalones = gestor.verPantalones();
 			
 		
 		for (clsPantalon clsPantalon : listaPantalones) 
 		{
-			String Codigo=clsPantalon.getStringProperty(clsConstantes.CODIGODEBARRASCAMI);
-			jcbPantalones.addItem("Cod. Barras" + Codigo);
+			System.out.println(listaPantalones);
+			int Codigo=clsPantalon.getIntegerProperty(clsConstantes.CODIGODEBARRASPANT);
+			String nombre=clsPantalon.getStringProperty(clsConstantes.NOMBREPANT);
+			jcbPantalones.addItem(Codigo + "--" + nombre);
+			
+			System.out.println(("Cod. Barras" + Codigo));
 		}
+		
+		
 		setTitle("Modificar pantalon");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(300,200,578,382);	
@@ -161,9 +146,8 @@ public class frmModifPant extends JFrame implements ActionListener
 	{
 		case "Modificar":
 		
-			if(txtNombre.getText().length()>0 && txtPrecio.getText().length()>0 && txtColor.getText().length()>0 && txtTalla.getText().length()>0 && txtCodigo.getText().length()>0)
-			{
-										
+			if( txtPrecio.getText().length()>0 && txtCantidad.getText().length()>0)
+			{						
 				pantalones=gestor.verPantalones();
 			
 				if (jcbPantalones.getSelectedItem() != null) 
@@ -177,27 +161,12 @@ public class frmModifPant extends JFrame implements ActionListener
 					{
 						if (clsPantalon.getIntegerProperty(clsConstantes.CODIGODEBARRASCAMI) == codigo) 
 						{
-							
-							String nombre1 = txtNombre.getText();
-							clsPantalon.setNombre(nombre1);
-
-							
+													
 							Double precio1 =Double.parseDouble(txtPrecio.getText());
 							clsPantalon.setPrecio(precio1);
 
-							
-							String color1 = txtColor.getText();
-							clsPantalon.setColor(color1);
-
-							
-							int talla1 = Integer.parseInt(txtTalla.getText());
-							clsPantalon.setTalla(talla1);
-							
-							
-							int codigo1 = Integer.parseInt(txtCodigo.getText());
-							clsPantalon.setCodbarrasPant(codigo1);
-							
-					//CheckBox de Bolsillos
+							int cantidad1=Integer.parseInt(txtCantidad.getText());
+							clsPantalon.setCantidad(cantidad1);
 							
 
 							gestor.modificarPantalon(pantalones);
@@ -226,5 +195,123 @@ public class frmModifPant extends JFrame implements ActionListener
 		frmMenuModif mm=new frmMenuModif();
 		mm.setVisible(true);
 	}
+	
+	private void crearTabla()
+	{	
+		table=null;
+		
+		TablaPantModifModel tab= new TablaPantModifModel(pantalones);
+		
+		table=new JTable(tab);
+		table.setPreferredScrollableViewportSize(new Dimension(500,70));
+		table.setFillsViewportHeight(true);
+		table.setRowSelectionAllowed(true);
+		tab.fireTableDataChanged();
+		
+	}
+	/**
+	 * Con este metodo, cargamos los datos procedentes del metodo verCamisetas de gestor, en una lista.
+	 * @throws IOException 
+	 */
+	private  void CargarDatos() 
+	{	
+		clsGestorAdministrador objGestor = new clsGestorAdministrador();
+		
+		pantalones=objGestor.verPantalones();
+		
+		if(pantalones.size()==0)
+		{
+			JOptionPane.showMessageDialog(this, "No hay camisetas registradas");
+			dispose();
+		}
+		
+	}
+}
+	/**
+	 * 
+	 * @author Paula y Andrea
+	 * Clase que creamos con el fin de crear la tabla.
+	 */
+	class TablaPantModifModel extends AbstractTableModel
+    {
+		private static final long serialVersionUID = 1L;
+		
+		private String[] columnNames = {"Cod Barras","Nombre","Talla","Color","Precio", "Escote", "Cantidad"};
+        Object[][] data;
+        /**
+         * Constructor del modelo de datos para la JTable de camisetas.
+         * @param m Lista de camiseta
+         */
+		
+        public TablaPantModifModel(HashSet<clsPantalon> m)
+        {      	
+        	super();     	
+    		setData(m);	
+        }
+        /**
+         * Método con la misma implementación del constructor para poder hacer un modelo de datos de la JTable de Camisetas.
+         * @param camisetas Lista de camisetas
+         */
+        public void setData(HashSet<clsPantalon> pantalones) 
+        {
+        	int filas = pantalones.size();
+    		int cont;
+    		
+    		data=new Object[filas][];
+    		cont=0;	
+    		
+    		for (clsPantalon aux : pantalones)
+    		{
+    			Object[]a = 
+    				{
+    				   new Integer(aux.getStringProperty(clsConstantes.CODIGODEBARRASPANT)),
+   					   new String(aux.getStringProperty(clsConstantes.NOMBREPANT)),
+   					   new Integer (aux.getIntegerProperty(clsConstantes.TALLAPANT)),
+   					   new String(aux.getStringProperty(clsConstantes.COLORPANT)),
+   					   new Double (aux.getDoubleProperty(clsConstantes.PRECIOPANT)),
+   					   new Boolean(aux.getBooleanProperty(clsConstantes.BOLSILLOS)),
+   					   new Integer(aux.getIntegerProperty(clsConstantes.CANTIDADPANT))
+    				   
+    				};
+    			
+    			data[cont]=a;
+    			cont++;
+    		}
+        }
+		
+		
+        @Override
+    	public int getColumnCount() {
+    		// TODO Auto-generated method stub
+    		return columnNames.length;
+    	}
+
+    	@Override
+    	public int getRowCount() {
+    		// TODO Auto-generated method stub
+    		return data.length;
+    	}
+
+    	public String getColumnName(int col) {
+            return columnNames[col];
+        }
+
+        public Object getValueAt(int row, int col) {
+            return data[row][col];
+        }
+        @SuppressWarnings({ "unchecked", "rawtypes" })
+    	public Class getColumnClass(int c) {
+            return getValueAt(0, c).getClass();
+        }
+        public boolean isCellEditable(int row, int col) 
+        {          
+                return false;           
+        }
+        public void setValueAt(Object value, int row, int col) 
+        {
+            
+            data[row][col] = value;
+            fireTableCellUpdated(row, col);
+        }
 
 }

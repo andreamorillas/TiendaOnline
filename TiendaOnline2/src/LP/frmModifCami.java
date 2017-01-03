@@ -27,6 +27,7 @@ import LN.clsGestorAdministrador;
 
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.Toolkit;
 /**
  * 
  * @author Paula y Andrea
@@ -37,12 +38,10 @@ public class frmModifCami extends JFrame implements ActionListener
 	
 	private static final long serialVersionUID = 1L;
 	
-	private JPanel contentPane;
-	private JTextField txtEscote;
-	private JCheckBox chckboxEscote;
+	
 	
 	private JComboBox<String> jcbCamisetas; 
-	private JLabel lblCamisetas;
+	
 	private clsGestorAdministrador gestor;
 	private JButton btnModificar;
 	private JTextField txtPrecio;
@@ -52,6 +51,10 @@ public class frmModifCami extends JFrame implements ActionListener
 	private JTable table;
 
 	private JScrollPane scrollPane;
+
+
+
+	private JLabel lblCamisetas;
 	
 	/**
 	 * Constructor, donde ponemos la ventana en modo visible y llamamos al metodo correspondiente para la creación de la ventana.
@@ -73,6 +76,8 @@ public class frmModifCami extends JFrame implements ActionListener
 		getContentPane().setLayout(null);
 		
 		crearTabla();
+		
+		setIconImage(Toolkit.getDefaultToolkit().getImage(clsPrincipal.class.getResource("/Image/Icono tienda.jpg")));
 		
 		JPanel contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));

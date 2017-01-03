@@ -5,6 +5,7 @@ import java.awt.Font;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
 
@@ -22,7 +23,11 @@ import javax.swing.table.DefaultTableModel;
 
 import COMUN.clsConstantes;
 import DATOS.itfDatos;
+import LN.ExcepcionClientesNoGuardados;
+import LN.ExcepcionNoCompras;
+import LN.clsCliente;
 import LN.clsGestorAdministrador;
+import LN.clsGestorCliente;
 import LN.clsPantalon;
 /**
  * 
@@ -35,8 +40,9 @@ public class frmClienteCompraPantalon extends JFrame implements ActionListener
 
 	static HashSet<clsPantalon> pantalones;
 	static JTable table;
-	
+	private String NICKNAME;
 	private JScrollPane scrollPant;
+	
 	/**
 	 * Es el constructor, el cual pone la ventana en modo visible.
 	 * Además, llama al metodo donde se va a crear la ventana.
@@ -104,18 +110,65 @@ public class frmClienteCompraPantalon extends JFrame implements ActionListener
 		switch(e.getActionCommand())
 		{
 		
-		case "Atras":
+			case "Atras":
+				
+				this.Atras();
+				this.dispose();
+				break;
 			
-			this.Atras();
-			this.dispose();
-			break;
+			case "Comprar":
+			
+			try
+			{
+				this.Comprar();
+				frmHilo hilo=new frmHilo();
+				hilo.setVisible(true);
+			} 
+			catch (ExcepcionClientesNoGuardados | ExcepcionNoCompras | IOException e1) 
+			{
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+				break;
 		
-		case "Comprar":
-			frmHilo hilo=new frmHilo();
-			hilo.setVisible(true);
-			break;
 		
 		}
+	}
+	private void Comprar() throws ExcepcionNoCompras, ExcepcionClientesNoGuardados, IOException {
+		int codigo;
+		int rowPantalones;
+		clsGestorCliente objGestor = new clsGestorCliente();	
+		rowPantalones=table.getSelectedRow();
+		if((rowPantalones!=-1) )
+		{
+			codigo=(int)table.getValueAt(rowPantalones, 0);
+			System.out.println(codigo);
+			clsCliente cliente=new clsCliente();
+			objGestor.compraPantalon(NICKNAME, codigo);
+			cliente = objGestor.DevolverCliente(NICKNAME);
+			RefrescarTabla();
+		
+		}
+		else
+		{
+			JOptionPane.showMessageDialog(this, "No olvide seleccionar un pantalon");
+		}
+		
+	}
+	public void RecogerNick(String nickname) throws ExcepcionClientesNoGuardados, IOException
+	{
+		NICKNAME = nickname;
+		clsCliente cliente = new clsCliente();
+		clsGestorCliente objGestor=new clsGestorCliente();
+		cliente = objGestor.DevolverCliente(NICKNAME);
+	}
+	private void RefrescarTabla() 
+	{
+		CargarDatos();
+		TablaPantModel tam=(TablaPantModel)table.getModel();
+		tam.setData(pantalones);
+		tam.fireTableDataChanged();
+		
 	}
 	/**
 	 * El programa accede a este metodo cuanod el usuario selecciona el bonton Atras.

@@ -5,7 +5,7 @@ import java.io.Serializable;
 import COMUN.clsConstantes;
 import COMUN.clsExcepcionParametroIncorrecto;
 
-public class clsCompra implements itfProperty, Serializable
+public class clsCompraCamiseta implements itfProperty, Serializable
 {
 
 	/**
@@ -16,7 +16,7 @@ public class clsCompra implements itfProperty, Serializable
 	private String nickname;
 	private int codigo;
 	private int id;
-	public clsCompra(String nickname, int codigo, int id) {
+	public clsCompraCamiseta(String nickname, int codigo, int id) {
 		super();
 		this.nickname = nickname;
 		this.codigo = codigo;
@@ -94,7 +94,7 @@ public class clsCompra implements itfProperty, Serializable
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		clsCompra other = (clsCompra) obj;
+		clsCompraCamiseta other = (clsCompraCamiseta) obj;
 		if (id != other.id)
 			return false;
 		return true;
